@@ -1,0 +1,271 @@
+// SCSS Variables
+$primary-color: #3498db;
+$secondary-color: #2c3e50;
+$success-color: #27ae60;
+$danger-color: #e74c3c;
+$warning-color: #f39c12;
+
+$light-bg: #f8f9fa;
+$white: #ffffff;
+$gray-100: #f8f9fa;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+
+$border-radius: 8px;
+$border-radius-lg: 12px;
+$transition: all 0.3s ease;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin button-base {
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: $transition;
+  
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@mixin form-control {
+  padding: 12px 16px;
+  border: 2px solid #ddd;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  background: $white;
+  transition: $transition;
+  font-family: inherit;
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+  }
+  
+  &:hover {
+    border-color: #bdc3c7;
+  }
+}
+
+.filter-container {
+  background: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  border: 1px solid #e1e5e9;
+}
+
+.filter-header {
+  @include flex-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #e1e5e9;
+
+  h2 {
+    margin: 0;
+    color: $secondary-color;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .clear-btn {
+    @include button-base;
+    background: transparent;
+    color: $primary-color;
+    border: 1px solid $primary-color;
+    
+    &:hover {
+      background: $primary-color;
+      color: $white;
+    }
+  }
+}
+
+.filter-form {
+  padding: 24px;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  
+  &.birth-year-group {
+    grid-column: 1 / -1;
+  }
+}
+
+.filter-label {
+  font-weight: 600;
+  color: darken($gray-600, 10%);
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.filter-select {
+  @include form-control;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 20px;
+  padding-right: 40px;
+}
+
+.filter-input {
+  @include form-control;
+}
+
+// Birth Year Specific Styles
+.birth-year-inputs {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 140px;
+  flex: 1;
+}
+
+.input-label {
+  font-size: 0.85rem;
+  color: $gray-600;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.unit-hint {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #95a5a6;
+  font-size: 0.8rem;
+  pointer-events: none;
+  margin-top: 24px;
+}
+
+.range-separator {
+  color: $gray-600;
+  font-weight: 500;
+  margin-top: 24px;
+  white-space: nowrap;
+}
+
+.help-text {
+  margin: 12px 0 0 0;
+  font-size: 0.85rem;
+  color: $gray-600;
+  line-height: 1.4;
+  background: $gray-100;
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 3px solid $primary-color;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .filter-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+
+    h2 {
+      font-size: 1.3rem;
+    }
+  }
+
+  .filter-form {
+    padding: 20px;
+  }
+
+  .filter-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .birth-year-inputs {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .input-group {
+    min-width: auto;
+  }
+
+  .range-separator {
+    text-align: center;
+    margin-top: 0;
+  }
+
+  .unit-hint {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-container {
+    margin: 0 -10px;
+    border-radius: $border-radius;
+  }
+
+  .filter-header {
+    padding: 12px 16px;
+  }
+
+  .filter-form {
+    padding: 16px;
+  }
+
+  .filter-select,
+  .filter-input {
+    padding: 10px 12px;
+    font-size: 16px; // Prevent zoom on iOS
+  }
+
+  .help-text {
+    font-size: 0.8rem;
+    padding: 10px;
+  }
+}

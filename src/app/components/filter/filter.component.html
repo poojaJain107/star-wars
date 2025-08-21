@@ -1,0 +1,87 @@
+<div class="filter-container">
+  <div class="filter-header">
+    <h2>Filter Characters</h2>
+    <button 
+      type="button" 
+      class="clear-btn"
+      (click)="onClearFilters()"
+      title="Clear all filters">
+      Clear Filters
+    </button>
+  </div>
+
+  <form [formGroup]="filterForm" class="filter-form">
+    <div class="filter-row">
+      <!-- Film Filter -->
+      <div class="filter-group">
+        <label for="filmSelect" class="filter-label">Movie:</label>
+        <select 
+          id="filmSelect"
+          formControlName="selectedFilm"
+          class="filter-select">
+          <option value="">All Movies</option>
+          <option 
+            *ngFor="let film of films; trackBy: trackByFilmUrl" 
+            [value]="film.url">
+            {{ getFilmDisplayName(film) }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Species Filter -->
+      <div class="filter-group">
+        <label for="speciesSelect" class="filter-label">Species:</label>
+        <select 
+          id="speciesSelect"
+          formControlName="selectedSpecies"
+          class="filter-select">
+          <option value="">All Species</option>
+          <option 
+            *ngFor="let specie of species; trackBy: trackBySpeciesUrl" 
+            [value]="specie.url">
+            {{ specie.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Birth Year Range Filter -->
+    <div class="filter-row">
+      <div class="filter-group birth-year-group">
+        <label class="filter-label">Birth Year Range:</label>
+        <div class="birth-year-inputs">
+          <div class="input-group">
+            <label for="birthYearStart" class="input-label">From:</label>
+            <input 
+              id="birthYearStart"
+              type="number"
+              formControlName="birthYearStart"
+              placeholder="e.g., -50"
+              class="filter-input"
+              (blur)="onBirthYearChange()"
+              title="Use negative numbers for BBY (Before Battle of Yavin) and positive for ABY (After Battle of Yavin)">
+            <span class="unit-hint">BBY/ABY</span>
+          </div>
+          
+          <span class="range-separator">to</span>
+          
+          <div class="input-group">
+            <label for="birthYearEnd" class="input-label">To:</label>
+            <input 
+              id="birthYearEnd"
+              type="number"
+              formControlName="birthYearEnd"
+              placeholder="e.g., 50"
+              class="filter-input"
+              (blur)="onBirthYearChange()"
+              title="Use negative numbers for BBY (Before Battle of Yavin) and positive for ABY (After Battle of Yavin)">
+            <span class="unit-hint">BBY/ABY</span>
+          </div>
+        </div>
+        <p class="help-text">
+          💡 Tip: Use negative values for BBY (Before Battle of Yavin) and positive for ABY (After Battle of Yavin)
+        </p>
+      </div>
+    </div>
+  </form>
+</div>

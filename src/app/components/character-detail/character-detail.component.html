@@ -1,0 +1,163 @@
+<div class="character-detail-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading character details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error">
+    <div class="error-content">
+      <h2>Character Not Found</h2>
+      <p>{{ error }}</p>
+      <div class="error-actions">
+        <button (click)="goBack()" class="back-btn">
+          ← Back to Characters
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Character Details -->
+  <div *ngIf="!loading && !error && characterDetails" class="character-content">
+    <!-- Header with Back Button -->
+    <div class="character-header">
+      <button (click)="goBack()" class="back-btn" title="Back to character list">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"/>
+        </svg>
+        Back to Characters
+      </button>
+    </div>
+
+    <!-- Character Info Card -->
+    <div class="character-card">
+      <div class="character-main-info">
+        <h1 class="character-name">{{ characterDetails.character.name }}</h1>
+        
+        <div class="character-basic-info">
+          <div class="info-item">
+            <span class="info-label">Birth Year:</span>
+            <span class="info-value">{{ formatBirthYear(characterDetails.character.birth_year) }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-label">Gender:</span>
+            <span class="info-value">{{ formatGender(characterDetails.character.gender) }}</span>
+          </div>
+        </div>
+
+        <!-- Physical Description -->
+        <div *ngIf="getCharacterPhysicalDescription().length > 0" class="physical-description">
+          <h3>Physical Description</h3>
+          <div class="description-grid">
+            <span *ngFor="let desc of getCharacterPhysicalDescription()" class="description-item">
+              {{ desc }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="details-grid">
+      <!-- Species -->
+      <div class="detail-section">
+        <h3 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+          </svg>
+          Species
+        </h3>
+        <div class="section-content">
+          <div *ngIf="characterDetails.species.length > 0; else noSpecies">
+            <div *ngFor="let specie of characterDetails.species" class="species-item">
+              <h4>{{ specie.name }}</h4>
+              <p *ngIf="specie.classification !== 'unknown'">
+                <strong>Classification:</strong> {{ specie.classification }}
+              </p>
+              <p *ngIf="specie.designation !== 'unknown'">
+                <strong>Designation:</strong> {{ specie.designation }}
+              </p>
+              <p *ngIf="specie.average_lifespan !== 'unknown' && specie.average_lifespan !== 'indefinite'">
+                <strong>Average Lifespan:</strong> {{ specie.average_lifespan }} years
+              </p>
+              <p *ngIf="specie.language !== 'unknown'">
+                <strong>Language:</strong> {{ specie.language }}
+              </p>
+            </div>
+          </div>
+          <ng-template #noSpecies>
+            <p class="no-data">Human (default)</p>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Movies -->
+      <div class="detail-section">
+        <h3 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M2 3a1 1 0 011-1h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 10.846 2.632 12.07 2.632 13.5c0 1.384 1.016 2.5 2.368 2.5s2.368-1.116 2.368-2.5c0-.377-.069-.74-.195-1.074l6.459-6.459a1 1 0 011.414 1.414L8.24 13.187c.126.334.195.697.195 1.074 0 1.384 1.016 2.5 2.368 2.5s2.368-1.116 2.368-2.5c0-1.43-1.108-2.654-2.368-2.914V9.5a1 1 0 00-1-1H7.414l-.293-.293a1 1 0 00-1.414 0L4 9.914V3a1 1 0 011-1h12a1 1 0 011 1v4a1 1 0 102 0V3a3 3 0 00-3-3H3a3 3 0 00-3 3v13a3 3 0 003 3h14a3 3 0 003-3V9a1 1 0 10-2 0v7a1 1 0 01-1 1H3a1 1 0 01-1-1V3z"/>
+          </svg>
+          Movies
+        </h3>
+        <div class="section-content">
+          <div *ngIf="characterDetails.films.length > 0; else noFilms">
+            <div class="films-list">
+              <div *ngFor="let film of characterDetails.films" class="film-item">
+                <h4>{{ getFilmDisplayName(film) }}</h4>
+                <p class="film-release">Released: {{ film.release_date | date:'mediumDate' }}</p>
+                <p *ngIf="film.director" class="film-director">Directed by: {{ film.director }}</p>
+              </div>
+            </div>
+          </div>
+          <ng-template #noFilms>
+            <p class="no-data">No movie appearances</p>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Starships -->
+      <div class="detail-section">
+        <h3 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+          </svg>
+          Starships
+        </h3>
+        <div class="section-content">
+          <div *ngIf="characterDetails.starships.length > 0; else noStarships">
+            <div class="starships-list">
+              <div *ngFor="let starship of characterDetails.starships" class="starship-item">
+                <h4>{{ starship.name }}</h4>
+                <p *ngIf="starship.model !== 'unknown'">
+                  <strong>Model:</strong> {{ starship.model }}
+                </p>
+                <p *ngIf="starship.starship_class !== 'unknown'">
+                  <strong>Class:</strong> {{ starship.starship_class }}
+                </p>
+                <p *ngIf="starship.manufacturer !== 'unknown'">
+                  <strong>Manufacturer:</strong> {{ starship.manufacturer }}
+                </p>
+                <div class="starship-specs">
+                  <span *ngIf="starship.length !== 'unknown'" class="spec-item">
+                    Length: {{ starship.length }}m
+                  </span>
+                  <span *ngIf="starship.crew !== 'unknown'" class="spec-item">
+                    Crew: {{ starship.crew }}
+                  </span>
+                  <span *ngIf="starship.hyperdrive_rating !== 'unknown'" class="spec-item">
+                    Hyperdrive: Class {{ starship.hyperdrive_rating }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #noStarships>
+            <p class="no-data">No known starships</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
