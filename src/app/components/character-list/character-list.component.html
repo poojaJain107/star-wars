@@ -1,3 +1,5 @@
+<!-- Update your character-list.component.html with this structure -->
+
 <div class="character-list-container">
   <h1>Star Wars Characters</h1>
   
@@ -13,56 +15,61 @@
     <button (click)="loadData()" class="retry-btn">Retry</button>
   </div>
 
-  <!-- Main Content -->
   <div *ngIf="!loading && !error" class="content">
-    <!-- Filter Component -->
-    <app-filter
-      [films]="films"
-      [species]="species"
-      (filterChange)="onFilterChange($event)"
-      class="filter-section">
-    </app-filter>
-
-    <!-- Results Summary -->
-    <div class="results-summary">
-      <p>Showing {{ filteredCharacters.length }} of {{ characters.length }} characters</p>
+    
+    <!-- LEFT COLUMN: Filter Component -->
+    <div class="filter-section">
+      <app-filter
+        [films]="films"
+        [species]="species"
+        (filterChange)="onFilterChange($event)">
+      </app-filter>
     </div>
 
-    <!-- Character List -->
-    <div class="character-grid" *ngIf="filteredCharacters.length > 0">
-      <div 
-        *ngFor="let character of filteredCharacters; trackBy: trackByCharacterUrl"
-        class="character-card"
-        (click)="onCharacterSelect(character)"
-        role="button"
-        tabindex="0"
-        (keydown.enter)="onCharacterSelect(character)"
-        (keydown.space)="onCharacterSelect(character)">
-        
-        <div class="character-info">
-          <h3 class="character-name">{{ getCharacterDisplayName(character) }}</h3>
-          <p class="character-details">
-            <span *ngIf="character.birth_year && character.birth_year !== 'unknown'">
-              Born: {{ character.birth_year }}
-            </span>
-            <span *ngIf="character.gender && character.gender !== 'unknown'">
-              • {{ character.gender | titlecase }}
-            </span>
-          </p>
-        </div>
-        
-        <div class="character-arrow">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
-          </svg>
+    <!-- RIGHT COLUMN: Characters Section -->
+    <div class="characters-section">
+      <!-- Results Summary -->
+      <div class="results-summary">
+        <p>Showing {{ filteredCharacters.length }} of {{ characters.length }} characters</p>
+      </div>
+
+      <!-- Character Grid -->
+      <div class="character-grid" *ngIf="filteredCharacters.length > 0">
+        <div 
+          *ngFor="let character of filteredCharacters; trackBy: trackByCharacterUrl"
+          class="character-card"
+          (click)="onCharacterSelect(character)"
+          role="button"
+          tabindex="0"
+          (keydown.enter)="onCharacterSelect(character)"
+          (keydown.space)="onCharacterSelect(character)">
+          
+          <div class="character-info">
+            <h3 class="character-name">{{ getCharacterDisplayName(character) }}</h3>
+            <p class="character-details">
+              <span *ngIf="character.birth_year && character.birth_year !== 'unknown'">
+                Born: {{ character.birth_year }}
+              </span>
+              <span *ngIf="character.gender && character.gender !== 'unknown'">
+                {{ character.gender | titlecase }}
+              </span>
+            </p>
+          </div>
+          
+          <div class="character-arrow">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
+            </svg>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- No Results -->
-    <div *ngIf="filteredCharacters.length === 0" class="no-results">
-      <p>No characters match the selected filters.</p>
-      <p>Try adjusting your filter criteria.</p>
+      <!-- No Results -->
+      <div *ngIf="filteredCharacters.length === 0" class="no-results">
+        <p>No characters match the selected filters.</p>
+        <p>Try adjusting your filter criteria.</p>
+      </div>
+      
     </div>
   </div>
 </div>
